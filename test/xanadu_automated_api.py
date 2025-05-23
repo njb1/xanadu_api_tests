@@ -47,7 +47,7 @@ def test_missing_username(valid_credentials):
     print(response.status_code)
     assert response.status_code == 400
     print(response.text)
-    #assert "username" in response.text.lower()
+    assert "username" in response.text.lower()
 
 def test_missing_password(valid_credentials):
     """
@@ -58,7 +58,7 @@ def test_missing_password(valid_credentials):
     print(response.status_code)
     assert response.status_code == 400
     print(response.text)
-    #assert "password" in response.text.lower() 
+    assert "password" in response.text.lower() 
 
 
 @pytest.mark.skip(reason="We dont have a way to test this")
