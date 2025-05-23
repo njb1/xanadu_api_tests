@@ -159,15 +159,10 @@ This matrix maps each requirement or feature to its corresponding API and UI tes
 A sample Jenkins pipeline configuration is provided in `jenkinsfile.new`.  
 This file demonstrates how you might automate the running of both API and UI tests in a CI/CD pipeline using Jenkins. It includes steps for installing dependencies, running tests, and handling results and notifications. Just a sample as we dont have a pipelint to run it against.
 
----
-
-Feel free to checkout a new branch and submit pull requests with improvements or additional tests.
-
----
 
 ## 🤝 Contributing
 
-If this was on GitHub you would be able to checkout a new branch and submit pull requests with improvements or additional tests.
+If this was on company GitHub you would be able to checkout a new branch and submit pull requests with improvements or additional tests.
 
 ---
 
@@ -177,7 +172,7 @@ Here are some useful git commands for working with repositories:
 
 - **Clone the repository:**
   ```
-  git clone https://github.com/your-org/the_repo.git
+  git clone https://github.com/the-company/the_repo.git
   ```
 
 - **Check the status of your working directory:**
