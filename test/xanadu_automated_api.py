@@ -27,7 +27,7 @@ def test_invalid_password(invalid_password_credentials):
     print(response.status_code)
     assert response.status_code == 400
     print(response.text)
-    #assert "Incorrect" in response.text.lower()
+    assert "Incorrect" in response.text.lower()
 
 def test_invalid_username(invalid_username_credentials):
     """
@@ -61,6 +61,7 @@ def test_missing_password(valid_credentials):
     #assert "password" in response.text.lower() 
 
 
+@pytest.mark.skip(reason="We dont have a way to test this")
 def test_session_token_expiry(valid_credentials):
     """
     Placeholder for session expiry logic. Should reject requests with expired session token.
