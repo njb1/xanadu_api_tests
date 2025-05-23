@@ -1,0 +1,81 @@
+{
+    "session-token": "645766_8bbfc4ed7f1755a7c64034f198e19d1",
+    "user-id": 645766,
+    "role": "USER",
+    "account": {
+        "id": 615764,
+        "user-id": 645766,
+        "name": {
+            "first": "First Name",
+            "last": "Last Name",
+            "title-id": "MR",
+            "title": "Mr"
+        },
+        "date-of-birth": "1970-01-01T12:00:00.000Z",
+        "email": "qa-test-3@xanadu.ie",
+        "phone-number": "+353 111111111",
+        "username": "xxx",
+        "balance": 0.00,
+        "free-funds": 0.00000000,
+        "exposure": 0.00000000,
+        "commission-credit": 0.00000000,
+        "status": "active",
+        "cashier-status": "row-unverified",
+        "casino-status": "active",
+        "virtuals-status": "active",
+        "language-id": 1,
+        "language": "English",
+        "address": {
+            "address-id": 605498,
+            "address-line-1": "Floor 2, River House",
+            "address-line-2": "n/a",
+            "region-name": "Cork",
+            "country": {
+                "country-id": 35,
+                "name": "Ireland",
+                "country-code": "IE"
+            },
+            "post-code": "T23 R5TF"
+        },
+        "currency-id": 2,
+        "currency": "EUR",
+        "odds-type-id": "DECIMAL",
+        "odds-type": "DECIMAL",
+        "bet-confirmation": false,
+        "display-p-and-l": true,
+        "exchange-type-id": "BACKLAY",
+        "exchange-type": "back-lay",
+        "odds-rounding": true,
+        "bonus-code": "XANADUINTERNAL",
+        "deposit-terms": "high",
+        "user-security-question": {
+            "user-security-question-id": 567106,
+            "question": {
+                "security-question-id": 5,
+                "security-question": "Your favourite holiday destination?"
+            }
+        },
+        "mfa-enabled": false,
+        "last-login": "2025-05-20T12:38:51.000Z",
+        "registration-time": "2025-05-19T16:18:59.000Z",
+        "bet-slip-pinned": true,
+        "marketing-consent": false,
+        "affordability-info-provided": false,
+        "proof-of-address-status": "SENT",
+        "proof-of-identity-status": "SENT",
+        "edd-status": "NOT_REQUESTED",
+        "responsible-gambling-interaction": "NONE",
+        "registration-vertical": "EXCHANGE",
+        "segment-category": "X",
+        "marketing-preferences": {
+            "product-casino-consent": false,
+            "product-exchange-consent": false,
+            "email-consent": false,
+            "sms-consent": false,
+            "consents-updated-at": "2025-05-19T16:21:33.000Z",
+            "consents-update-required": false
+        },
+        "terms-and-conditions-accepted": true
+    },
+    "last-login": "2025-05-20T12:38:51.000Z"
+}

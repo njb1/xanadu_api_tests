@@ -1,0 +1,101 @@
+# Test Strategy for Matchbook Login API & UI (QA challenge)
+
+## Introduction
+
+This test strategy outlines the approach taken to ensure comprehensive coverage of the login functionality for the Matchbook gambling website. 
+The login process is a critical security and usability feature, and our strategy is designed to validate both expected and edge-case behaviors, as well as to guard against common security threats.
+We look at this as a normal user and as someone who it trying to access the site without proper creds and/or attempting to cause trouble.
+
+---
+
+## Why We Wrote These Tests
+
+- **Risk Mitigation:** Login is a primary entry point for users and a common target for attacks (e.g., brute force, SQL injection). 
+  Thorough testing reduces the risk of unauthorized access and data breaches.
+- **Regulatory Compliance:** As a gambling website, Matchbook must comply with strict security and user management regulations.
+- **User Experience:** Ensuring the login process is robust and user-friendly is essential for customer retention and trust.
+- **Traceability:** Each requirement is mapped to one or more test cases in our traceability matrix, ensuring no requirement is left untested.
+
+---
+
+## Test Coverage Approach
+
+We have split our testing into three main areas:
+
+### 1. Manual API Testing (Main Testing Effort)
+
+- **Purpose:** To validate the core login API against all functional and security requirements.
+- **Scope:** Covers positive and negative scenarios, boundary conditions, and security threats.
+- **Tools Used:**  
+  - **VS Code** for test case authoring and documentation  
+  - **Postman** and **Insomnia** for manual API execution and validation
+- **Test Cases:**  
+  - Valid login
+  - Invalid password/username
+  - Missing fields
+  - Session token usage and expiry
+  - JSON response structure
+  - Account suspension after failed logins
+  - IP blocking after excessive attempts
+  - SQL injection protection
+  - Field length boundaries
+- **Documentation:**  
+  - Test cases are detailed in `xanadu_manual_api.txt` and `xanadu_manual_api_detailed.txt`
+  - Step-by-step instructions for both Postman and Insomnia are provided for reproducibility
+
+### 2. Automated API Testing (Expanded API Testing)
+
+- **Purpose:** To automate regression and edge-case testing, enabling frequent and consistent validation.
+- **Scope:** Mirrors and expands on the manual API tests, adding automation for rapid feedback and CI/CD integration.
+- **Tools Used:**  
+  - **Python** with **pytest** and **requests** for scripting and execution  
+  - **VS Code** for development  
+  - **Jenkins** for pipeline automation (see `jenkinsfile.new`)
+- **Test Cases:**  
+  - Automated versions of all manual API tests, including security and boundary checks
+  - Additional negative and edge-case scenarios
+  - Automated validation of response structure and error handling
+- **Benefits:**  
+  - Enables quick detection of regressions
+  - Supports continuous integration and delivery
+  - Reduces manual effort and human error
+
+### 3. UI Testing (Complimentary Testing)
+
+- **Purpose:** To ensure the frontend login form interacts correctly with the backend and provides appropriate feedback to users.
+- **Scope:** Focuses on user experience, form validation, and visual feedback.
+- **Tools Used:**  
+  - **Selenium** (Python) for browser automation  
+  - **VS Code** for scripting  
+  - Manual browser testing for exploratory scenarios
+- **Test Cases:**  
+  - Valid and invalid login attempts
+  - Field validation (empty, too short, too long)
+  - Password masking and visibility toggle
+  - Session timeout and persistence
+  - UI response to security threats (e.g., SQL injection)
+- **Documentation:**  
+  - Test cases are detailed in `xanadu_manual_ui.txt`
+  - Automated tests are in `test/xanadu_automated_ui.py`
+
+---
+
+## Traceability and Coverage
+
+- **Traceability Matrix:**  
+  - Located in `src/tracability_matrix.txt`
+  - Maps each requirement/feature to its corresponding API and UI test cases
+  - Ensures all scenarios are covered and provides an audit trail for compliance
+
+- **Comprehensive Coverage:**  
+  - All functional, boundary, and security requirements for the login API are tested
+  - Both backend (API) and frontend (UI) perspectives are validated
+  - Manual and automated approaches ensure both depth and breadth of coverage
+
+---
+
+## Summary
+
+This strategy ensures that the Matchbook login API is robust, secure, and user-friendly. 
+By combining manual and automated testing, and by leveraging industry-standard tools (VS Code, Postman, Insomnia, Selenium, Jenkins), we achieve thorough coverage and rapid feedback. 
+The traceability matrix guarantees that every requirement is tested, supporting both quality assurance and regulatory compliance for a gambling website.

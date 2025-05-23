@@ -1,0 +1,238 @@
+--------------------------------------------------------------------------------
+Test Case API-1: Valid Login Request
+
+**Precondition:** Valid username and password exist.
+
+**Steps (Postman):**
+1. Open Postman.
+2. Click "New" > "Request". Name it "Valid Login" and save to a collection.
+3. Set method to POST.
+4. Enter URL: https://api.matchbook.com/bpapi/rest/security/session
+5. Go to the "Body" tab, select "raw", and choose "JSON" from the dropdown.
+6. Enter:
+   {
+     "username": "YOUR_VALID_USERNAME",
+     "password": "YOUR_VALID_PASSWORD"
+   }
+7. Click "Send".
+8. Check the response:
+   - Status is 200.
+   - Response body contains "session-token" with a value.
+
+**Steps (Insomnia):**
+1. Open Insomnia.
+2. Click "+" > "New Request", name it "Valid Login", set method to POST.
+3. Enter URL: https://api.matchbook.com/bpapi/rest/security/session
+4. Go to "Body", select "JSON", and enter:
+   {
+     "username": "YOUR_VALID_USERNAME",
+     "password": "YOUR_VALID_PASSWORD"
+   }
+5. Click "Send".
+6. Check the response for status 200 and "session-token" in the body.
+
+--------------------------------------------------------------------------------
+Test Case API-2: Invalid Password
+
+**Precondition:** Valid username exists.
+
+**Steps (Postman):**
+1. Repeat steps 1-5 from Test Case API-1.
+2. Enter a valid username and an invalid password in the JSON body.
+3. Click "Send".
+4. Check the response:
+   - Status is 400.
+   - Response body contains an error message about invalid credentials.
+   - No "session-token" is present.
+
+**Steps (Insomnia):**
+1. Repeat steps 1-4 from Test Case API-1.
+2. Enter a valid username and an invalid password.
+3. Click "Send".
+4. Check for status 400 and error message.
+
+--------------------------------------------------------------------------------
+Test Case API-3: Invalid Username
+
+**Precondition:** Invalid username.
+
+**Steps (Postman):**
+1. Repeat steps 1-5 from Test Case API-1.
+2. Enter an invalid username and any password.
+3. Click "Send".
+4. Check for status 400 and error message about invalid credentials.
+
+**Steps (Insomnia):**
+1. Repeat steps 1-4 from Test Case API-1.
+2. Enter an invalid username and any password.
+3. Click "Send".
+4. Check for status 400 and error message.
+
+--------------------------------------------------------------------------------
+Test Case API-4: Missing Username
+
+**Precondition:** None.
+
+**Steps (Postman):**
+1. Repeat steps 1-5 from Test Case API-1.
+2. Enter only the password in the JSON body (omit "username").
+3. Click "Send".
+4. Check for status 400 and error message about missing username.
+
+**Steps (Insomnia):**
+1. Repeat steps 1-4 from Test Case API-1.
+2. Enter only the password in the JSON body.
+3. Click "Send".
+4. Check for status 400 and error message.
+
+--------------------------------------------------------------------------------
+Test Case API-5: Missing Password
+
+**Precondition:** None.
+
+**Steps (Postman):**
+1. Repeat steps 1-5 from Test Case API-1.
+2. Enter only the username in the JSON body (omit "password").
+3. Click "Send".
+4. Check for status 400 and error message about missing password.
+
+**Steps (Insomnia):**
+1. Repeat steps 1-4 from Test Case API-1.
+2. Enter only the username in the JSON body.
+3. Click "Send".
+4. Check for status 400 and error message.
+
+--------------------------------------------------------------------------------
+Test Case API-6: Session Token Usage
+
+**Precondition:** Successful login and session token received.
+
+**Steps (Postman):**
+1. Perform a valid login as in Test Case API-1 and copy the "session-token" from the response.
+2. Create a new request (e.g., GET to another endpoint).
+3. In the "Headers" tab, add: Key = session-token, Value = <copied token>
+4. Click "Send".
+5. Check that the request is authenticated and succeeds.
+
+**Steps (Insomnia):**
+1. Perform a valid login and copy the "session-token".
+2. Create a new request to another endpoint.
+3. In the "Headers" section, add "session-token" with the copied value.
+4. Click "Send" and check for successful authentication.
+
+--------------------------------------------------------------------------------
+Test Case API-7: Session Token Expiry
+
+**Precondition:** Successful login and session token received.
+
+**Steps (Postman/Insomnia):**
+1. Perform a valid login and copy the "session-token".
+2. Wait for more than 6 hours.
+3. Use the token in a new request as in Test Case API-6.
+4. Click "Send".
+5. Check that the request is rejected due to expired session token.
+
+--------------------------------------------------------------------------------
+Test Case API-8: Validate JSON Response Structure and Data
+
+**Precondition:** Successful login with valid credentials.
+
+**Steps (Postman/Insomnia):**
+1. Perform a valid login as in Test Case API-1.
+2. Inspect the JSON response body.
+3. Confirm it contains:
+   - "session-token" (not empty)
+   - "user-id" matches expected user
+   - "account" object with:
+     - "username" matching login
+     - "email" matching registered email
+     - "status" is "active"
+     - "role" is "USER"
+     - "balance", "currency", and "last-login" present and correctly formatted
+
+--------------------------------------------------------------------------------
+Test Case API-9: Account Suspension After Three Failed Logins
+
+**Precondition:** Valid username exists; account is active.
+
+**Steps (Postman/Insomnia):**
+1. Attempt to log in with valid username and invalid password three times in a row.
+2. On the fourth attempt, use the correct password.
+3. Check that after the third failed attempt, the account is suspended.
+4. The fourth login attempt fails with an error indicating suspension or lock.
+5. Response body contains an appropriate error message.
+
+--------------------------------------------------------------------------------
+Test Case API-10: IP Block After Excessive Login Attempts
+
+**Precondition:** Use a single IP address.
+
+**Steps (Postman/Insomnia):**
+1. Attempt to log in (with any credentials) more than 25 times within one minute from the same IP address.
+2. Attempt another login from the same IP after exceeding the limit.
+3. Check that after 25 attempts, further logins are blocked.
+4. Response status is 429 (Too Many Requests) or 403 (Forbidden), or another appropriate error code.
+5. Response body contains an error message indicating the IP is temporarily blocked.
+
+--------------------------------------------------------------------------------
+Test Case 8: SQL Injection Attempt in Login
+
+Detailed Steps for Manual Testing in Postman and Insomnia
+
+----------------------------------------------------------
+**Precondition:** User is on the login page or ready to send a login request.
+
+----------------------------------------------------------
+**Using Postman:**
+
+1. Open Postman.
+2. Click "New" > "Request". Name it "SQL Injection Login Attempt" and save it to a collection.
+3. Set the request method to POST.
+4. Enter the URL:
+   https://api.matchbook.com/bpapi/rest/security/session
+5. Go to the "Body" tab, select "raw", and choose "JSON" from the dropdown.
+6. Enter the following JSON in the body:
+   ```json
+   {
+     "username": "' OR 1=1; --",
+     "password": "anyvalue"
+   }
+   ```
+7. Click "Send".
+8. Observe the response:
+   - The status code should NOT be 200 (expect 400 or similar).
+   - The response body should display an error message indicating invalid credentials.
+   - There should be no database error messages or stack traces.
+   - No session token or user data should be returned.
+
+----------------------------------------------------------
+**Using Insomnia:**
+
+1. Open Insomnia.
+2. Click "+" > "New Request", name it "SQL Injection Login Attempt", and set the method to POST.
+3. Enter the URL:
+   https://api.matchbook.com/bpapi/rest/security/session
+4. Go to the "Body" tab, select "JSON".
+5. Enter:
+   ```json
+   {
+     "username": "' OR 1=1; --",
+     "password": "anyvalue"
+   }
+   ```
+6. Click "Send".
+7. Observe the response:
+   - Status code should NOT be 200 (expect 400 or similar).
+   - The response body should show an error about invalid credentials.
+   - No database errors or stack traces should be visible.
+   - No session token or user data should be returned.
+
+----------------------------------------------------------
+**Expected Result:**
+- Login attempt fails.
+- An error message is displayed indicating invalid credentials.
+- The application does not crash or expose any database errors.
+- No unauthorized access is granted.
+
+----------------------------------------------------------
+

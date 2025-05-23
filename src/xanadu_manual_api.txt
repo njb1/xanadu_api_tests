@@ -1,0 +1,135 @@
+Section A - API Manual Test Cases for Login Endpoint
+
+Please note, the valid username and password will be excluded from this document.
+Refer to 'qa challenge.pdf' or blob.json for credentials.
+
+Test Case API-1: Valid Login Request
+This test is for our happy path, a valid username and password is supplied and the test should pass.
+- Precondition: Valid username and password exist.
+- Steps:
+  1. Send a POST request via Postman/Insomnia to https://api.matchbook.com/bpapi/rest/security/session with valid username and password in the body (raw/json).
+- Expected Result: Response status is 200. Response body contains a session token. Session token is present in the json blob.
+
+Test Case API-2: Invalid Password
+This should fail successfully, check for 400 here indicating incorrect credentials.
+Note we didnt create an invalid username/password specific test; this is done implicitly.
+- Precondition: Valid username exists.
+- Steps:
+  1. Send a POST request via Postman/Insomnia to https://api.matchbook.com/bpapi/rest/security/session with a valid username and an invalid password in the body (raw/json).
+- Expected Result: Response status is 400. Response body contains an error message indicating invalid credentials. No session token is returned.
+
+Test Case API-3: Invalid Username
+This should fail successfully, check for 400 here indicating incorrect credentials.
+Note we didnt create an invalid username/password specific test; this is done implicitly.
+- Precondition: Invalid username.
+- Steps:
+  1. Send a POST request via Postman/Insomnia to https://api.matchbook.com/bpapi/rest/security/session with an invalid username and any password in the body (raw/json).
+- Expected Result: Response status is 400. Response body contains an error message indicating invalid credentials. No session token is returned.
+
+Test Case API-4: Missing Username
+This should fail successfully, check for 400 here indicating incorrect credentials.
+- Precondition: None.
+- Steps:
+  1. Send a POST request via Postman/Insomnia to https://api.matchbook.com/bpapi/rest/security/session with the password only (omit the username field) in the body (raw/json).
+- Expected Result: Response status is 400. Response body contains an error message indicating the username is required.
+
+Test Case API-5: Missing Password
+This should fail successfully, check for 400 here indicating incorrect credentials.
+- Precondition: None.
+- Steps:
+  1. Send a POST request via Postman/Insomnia to https://api.matchbook.com/bpapi/rest/security/session with the username only (omit the password field) in the body (raw/json).
+- Expected Result: Response status is 400. Response body contains an error message indicating the password is required.
+
+Test Case API-6: Session Token Usage
+This is out of scope for the current run of tests as we are interested in Login only.
+- Precondition: Successful login and session token received.
+- Steps:
+  1. Use the session token from a valid login as a header in a subsequent API request; for example:
+  (GET)https://developers.matchbook.com/reference/retrieve-status-of-current-heartbeat-subscription
+- Expected Result: The request is authenticated and succeeds (not rejected for missing/invalid session).
+
+Test Case API-7: Session Token Expiry
+- Precondition: Successful login and session token received.
+- Steps:
+  1. Wait for more than 6 hours after login.
+  2. Attempt to use the session token in a subsequent API request.
+- Expected Result: The request is rejected due to expired session token; user must log in again.
+
+Test Case API-8: Validate JSON Response Structure and Data
+- Precondition: Successful login with valid credentials.
+- Steps:
+  1. Send a POST request to https://api.matchbook.com/bpapi/rest/security/session with valid username and password.
+  2. Inspect the JSON response body.
+- Expected Result:
+    - The response contains a "session-token" field with a non-empty value.
+    - Note: A good extra test here is that the "session-token" is not repeated
+    - The "user-id" matches the expected user.
+    - The "account" object contains:
+        - "username" matching the login username.
+        - "email" matching the registered email (e.g., qa-test-3@xanadu.ie).
+        - "status" is "active".
+        - "role" is "USER".
+        - Other required fields such as "balance", "currency", and "last-login" are present and correctly formatted.
+        - Note: Out of scope - determine if values reflect the database entries.
+
+Test Case API-9: Account Suspension After Three Failed Logins
+- Precondition: Valid username exists; account is active.
+- Steps:
+  1. Attempt to log in with the valid username and an invalid password three times in a row.
+  2. On the fourth attempt, try to log in with the correct password.
+- Expected Result:
+    - After the third failed attempt, the account is suspended.
+    - The fourth login attempt (even with correct credentials) fails with an error indicating the account is suspended or locked.
+    - Appropriate error message is returned in the response body.
+
+Test Case API-10: IP Block After Excessive Login Attempts
+- Precondition: Use a single IP address.
+- Steps:
+  1. Attempt to log in (with any credentials) more than 25 times within one minute from the same IP address.
+  Note: Obviously this is via automation only. Have a think on how we might limit requests.
+  2. Attempt another login from the same IP address after exceeding the limit.
+  Note: Think about having two dev-vms with different IPs to test this out.
+- Expected Result:
+    - After 25 attempts in one minute, further login attempts from that IP are blocked.
+    - The response status is 429 (Too Many Requests) or 403 (Forbidden), or an appropriate error code.
+    - The response body contains an error message indicating the IP is temporarily blocked due to too many attempts.
+
+Test Case API-11: Username and Password Field Length Boundaries
+
+- Precondition: None.
+- Note: We can automate this but wont for the moment. This is better run manually
+
+- Steps:
+  1. Send a POST request to https://api.matchbook.com/bpapi/rest/security/session with a username at the minimum allowed length (e.g., 1 character) and a valid password.
+  2. Send a POST request with a username at the maximum allowed length (e.g., 50 or 255 characters, depending on API requirements) and a valid password.
+  3. Send a POST request with a username exceeding the maximum allowed length by one character and a valid password.
+  4. Send a POST request with a valid username and a password at the minimum allowed length (e.g., 1 character).
+  5. Send a POST request with a valid username and a password at the maximum allowed length (e.g., 50 or 255 characters).
+  6. Send a POST request with a valid username and a password exceeding the maximum allowed length by one character.
+  7. For each case, observe the API response.
+
+- Expected Result:
+    - The API accepts usernames and passwords that are within the allowed length boundaries and processes the login attempt (returns 200 for valid credentials, 400 for invalid credentials).
+    - The API rejects usernames and passwords that are shorter than the minimum or longer than the maximum allowed length, returning a 400 status and an appropriate error message.
+    - The API does not crash or return server errors when boundary values are tested.
+
+Test Case API-12: SQL Injection Attempt in Login
+
+- Precondition: None.
+
+- Steps:
+  1. Send a POST request to https://api.matchbook.com/bpapi/rest/security/session with the following JSON body:
+     {
+       "username": "' OR 1=1; --",
+       "password": "anyvalue"
+     }
+  2. Observe the API response.
+
+- Expected Result:
+    - The login attempt fails (status code is not 200; expect 400 or similar).
+    - The response body contains an error message indicating invalid credentials.
+    - No session token or user data is returned.
+    - The API does not expose any database errors, stack traces, or SQL error messages.
+    - (Essentially this is what we to check here, that someone isnt trying something sinister)
+    - No unauthorized access is granted.
+

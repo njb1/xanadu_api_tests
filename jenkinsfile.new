@@ -1,0 +1,54 @@
+pipeline {
+    agent any
+
+    environment {
+        // Set up any environment variables here if needed
+        PYTHONPATH = "${env.WORKSPACE}"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                // Install Python dependencies for API and UI tests
+                sh 'pip install --upgrade pip'
+                // I think these are all the dependencies needed for both API and UI tests
+                sh 'pip install pytest requests selenium'
+                // Download ChromeDriver if needed (example for Linux)
+                // sh 'wget -N https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && chmod +x chromedriver && mv chromedriver /usr/local/bin/'
+            }
+        }
+
+        stage('Run API Tests') {
+            steps {
+                sh 'pytest test/xanadu_automated_api.py --maxfail=1 --disable-warnings -v'
+            }
+        }
+
+        stage('Run UI Tests') {
+            steps {
+                // You may need to set DISPLAY=:99 or use xvfb-run for headless environments
+                // Example for headless Chrome:
+                sh 'pytest test/xanadu_automated_ui.py --maxfail=1 --disable-warnings -v'
+            }
+        }
+    }
+
+    post {
+        always {
+            // Archive test results, logs, etc.
+            junit '**/test-results.xml'
+        }
+        failure {
+            // Might be able to send this to teams or slack using webhooks
+            mail to: 'qa-team@example.com',
+                 subject: "Jenkins Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                 body: "Check Jenkins for details: ${env.BUILD_URL}"
+        }
+    }
+}

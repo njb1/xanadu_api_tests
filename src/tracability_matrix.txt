@@ -1,0 +1,21 @@
+| Requirement / Feature                       | API Test Case(s)        | UI Test Case(s)         |
+|---------------------------------------------|-------------------------|-------------------------|
+| Valid login                                 | API-1                   | UI-1                    |
+| Invalid password                            | API-2                   | UI-2                    |
+| Invalid username                            | API-3                   | UI-3                    |
+| Missing username                            | API-4                   | UI-4                    |
+| Missing password                            | API-5                   | UI-4                    |
+| Session token usage                         | API-6                   | (N/A)                   |
+| Session token expiry                        | API-7                   | UI-6                    |
+| JSON response structure                     | API-8                   | UI-1 (account details)  |
+| Account suspension after failed logins      | API-9                   | (N/A)                   |
+| IP block after excessive login attempts     | API-10                  | (N/A)                   |
+| SQL injection protection                    | API-12                  | UI-8                    |
+| Username/password field length boundaries   | API-11                  | UI-9                    |
+| Password field masking                      | (N/A)                   | UI-5                    |
+| Remember Me/session persistence             | (N/A)                   | UI-7                    |
+
+Legend:
+- API-1, API-2, ... refer to test case numbers in `xanadu_manual_api_detailed.txt`
+- UI-1, UI-2, ... refer to test case numbers in `xanadu_manual_ui.txt`
+- (N/A) means not applicable or not covered by that type of test

@@ -1,0 +1,87 @@
+Section B - Manual Test Cases for Login UI Functionality (https://www.matchbook.com)
+
+Test Case 1: Valid Login
+- Precondition: User is on the https://www.matchbook.com/ login page.
+- Steps:
+  1. Enter a valid username in the "Username" field.
+  2. Enter a valid password in the "Password" field.
+  3. Click the "Login" button.
+- Expected Result: User is successfully logged in and redirected to the pop-up login screen.
+- Note: You should be able to go to 'account' and determine details are the same as the json blob from the api test.
+
+Test Case 2: Invalid Password
+- Precondition: User is on the https://www.matchbook.com/ login page.
+- Steps:
+  1. Enter a valid username in the "Username" field.
+  2. Enter an invalid password in the "Password" field.
+  3. Click the "Login" button.
+- Expected Result: An error message is displayed indicating invalid credentials. User remains on the login page.
+
+Test Case 3: Invalid Username
+- Precondition: User is on the https://www.matchbook.com/ login page.
+- Steps:
+  1. Enter an invalid username in the "Username" field.
+  2. Enter a valid password in the "Password" field.
+  3. Click the "Login" button.
+- Expected Result: An error message is displayed indicating invalid credentials. User remains on the login page.
+
+Test Case 4: Empty Username and Password
+- Precondition: User is on the https://www.matchbook.com/ login page.
+- Steps:
+  1. Leave the "Username" field empty.
+  2. Leave the "Password" field empty.
+  3. Click the "Login" button.
+- Expected Result: Error messages are displayed for both fields indicating they are required. User remains on the login page.
+
+Test Case 5: Password Field Masking
+- Precondition: User is on the https://www.matchbook.com/ login page.
+- Steps:
+  1. Enter any text in the "Password" field.
+- Expected Result: The password is masked (displayed as dots or asterisks, not visible as plain text).
+- Note: we should have an 'eye' symbol that shows the password
+
+Test Case 6: Session Timeout
+- Precondition: User is logged in to https://www.matchbook.com/.
+- Steps:
+  1. Remain inactive for the session timeout duration (e.g., 6 hours as specified in the spec).
+- Expected Result: User is automatically logged out and redirected to the login page. A message may be displayed indicating the session has expired.
+
+Test Case 7: Remember Me Functionality 
+- Precondition: User is on the https://www.matchbook.com/ login page.
+- We dont have this 'remember me' button. Possible enhancement ticket but might be as designed with the six hour timeout.
+- Check however that we can close the browser and reopen without having to log in again.
+- Steps:
+  1. Enter valid credentials in the "Username" and "Password" fields.
+  2. Check the "Remember Me" option (if available).
+  3. Click the "Login" button.
+  4. Close and reopen the browser, then revisit https://www.matchbook.com/.
+- Expected Result: User remains logged in or the username is pre-filled, depending on implementation.
+
+Test Case 8: SQL Injection Attempt in Login
+- Precondition: User is on the https://www.matchbook.com/ login page.
+- Steps:
+  1. Enter a typical SQL injection string (e.g., `' OR 1=1; --`) in the "Username" field.
+  2. Enter any value in the "Password" field.
+  3. Click the "Login" button.
+- Expected Result: 
+    - Login attempt fails.
+    - An error message is displayed indicating invalid credentials.
+    - The application does not crash or expose any database errors.
+    - No unauthorized access is granted.
+
+Test Case 9: Username and Password Field Length Boundaries
+- Precondition: User is on the https://www.matchbook.com/ login page.
+- Note: Have a file handy (i use mobydick.txt) and cut and paste the text to check extreme boundry.
+- Steps:
+  1. Attempt to enter a username with the minimum allowed number of characters (e.g., 1 character, if allowed).
+  2. Attempt to enter a username with the maximum allowed number of characters (e.g., 50 or 255, depending on requirements).
+  3. Attempt to enter a username exceeding the maximum allowed length by one character.
+  4. Attempt to enter a password with the minimum allowed number of characters (e.g., 1 character, if allowed).
+  5. Attempt to enter a password with the maximum allowed number of characters (e.g., 50 or 255, depending on requirements).
+  6. Attempt to enter a password exceeding the maximum allowed length by one character.
+  7. Attempt to enter a password using large amounts of text (e.g. from a file like mobydick.txt).
+  8. For each case, try to submit the login form.
+- Expected Result:
+    - The system accepts usernames and passwords that are within the allowed length boundaries and processes the login attempt.
+    - The system rejects usernames and passwords that are shorter than the minimum or longer than the maximum allowed length, displaying an appropriate error message.
+    - The application does not crash or behave unexpectedly when boundary values are tested.
